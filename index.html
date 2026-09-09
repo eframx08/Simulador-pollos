@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financiero - Avícola</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-green-bg: rgba(16, 185, 129, 0.1);
+            --accent-blue: #3b82f6;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .main-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-hero {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-hero label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-hero input {
+            width: 100%;
+            background: #0f172a;
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-hero input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        .unit-badge {
+            position: absolute;
+            right: 20px;
+            background: var(--card-border);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 640px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card.highlight {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 78, 59, 0.3));
+            border-color: var(--accent-green);
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+        }
+
+        .kpi-card.highlight .kpi-value {
+            color: var(--accent-green);
+        }
+
+        .kpi-card.cost .kpi-value {
+            color: #f87171;
+        }
+
+        .kpi-card.sales .kpi-value {
+            color: #60a5fa;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detail-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+
+        .detail-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--card-border);
+            font-size: 0.9rem;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .row-label {
+            color: var(--text-muted);
+        }
+
+        .row-val {
+            font-weight: 600;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="header">
+        <h1>Simulador Avícola Pro</h1>
+        <p>Proyección financiera interactiva para pollos de engorde (42 días)</p>
+    </div>
+
+    <!-- INGRESAR POLLOS -->
+    <div class="main-card">
+        <div class="input-hero">
+            <label for="pollos">Lote de Aves a Ingresar</label>
+            <div class="input-wrapper">
+                <input type="number" id="pollos" value="100" min="1" oninput="calcular()">
+                <span class="unit-badge">Pollos BB</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TARJETAS PRINCIPALES (KPIs) -->
+    <div class="kpi-grid">
+        <div class="kpi-card cost">
+            <div class="kpi-label">Inversión Estimada</div>
+            <div class="kpi-value">Q<span id="kpiInversion">0.00</span></div>
+        </div>
+        <div class="kpi-card sales">
+            <div class="kpi-label">Venta Total Bruta</div>
+            <div class="kpi-value">Q<span id="kpiVenta">0.00</span></div>
+        </div>
+        <div class="kpi-card highlight">
+            <div class="kpi-label">Ganancia Neta</div>
+            <div class="kpi-value">Q<span id="kpiGanancia">0.00</span></div>
+        </div>
+    </div>
+
+    <!-- DESGLOSE TÉCNICO -->
+    <div class="details-grid">
+        <!-- COSTOS -->
+        <div class="detail-card">
+            <h3>🔴 Insumos & Costos</h3>
+            <div class="row">
+                <span class="row-label">Pollitos BB (Q7.00/u)</span>
+                <span class="row-val">Q<span id="cPollos">0.00</span></span>
+            </div>
+            <div class="row">
+                <span class="row-label">Concentrado (<span id="qqCant">0</span> qq @ Q250)</span>
+                <span class="row-val">Q<span id="cConcentrado">0.00</span></span>
+            </div>
+            <div class="row">
+                <span class="row-label">Vitaminas y Vacunas (Q1.50/u)</span>
+                <span class="row-val">Q<span id="cVitaminas">0.00</span></span>
+            </div>
+        </div>
+
+        <!-- PRODUCTIVIDAD -->
+        <div class="detail-card">
+            <h3>🟢 Rendimiento & Ventas</h3>
+            <div class="row">
+                <span class="row-label">Supervivencia (85%)</span>
+                <span class="row-val"><span id="avesVivas">0</span> aves</span>
+            </div>
+            <div class="row">
+                <span class="row-label">Libras Totales (5 lbs/ave)</span>
+                <span class="row-val"><span id="totalLbs">0</span> lbs</span>
+            </div>
+            <div class="row">
+                <span class="row-label">Precio Mercado (Q11.00/lb)</span>
+                <span class="row-val">Q<span id="pVenta">11.00</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        Calculado con tasa de mortalidad del 15% y rendimiento alimenticio estándar de 10 quintales por cada 100 aves.
+    </div>
+</div>
+
+<script>
+    function calcular() {
+        let n = parseFloat(document.getElementById('pollos').value) || 0;
+
+        // Costos
+        let cPollos = n * 7;
+        let qq = n * 0.10;
+        let cConcentrado = qq * 250;
+        let cVitaminas = n * 1.50;
+        let inversion = cPollos + cConcentrado + cVitaminas;
+
+        // Rendimiento & Ventas
+        let vivas = Math.floor(n * 0.85);
+        let lbs = vivas * 5;
+        let venta = lbs * 11;
+        let ganancia = venta - inversion;
+
+        // Render KPI
+        document.getElementById('kpiInversion').innerText = inversion.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('kpiVenta').innerText = venta.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('kpiGanancia').innerText = ganancia.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+        // Render Detalles
+        document.getElementById('cPollos').innerText = cPollos.toFixed(2);
+        document.getElementById('qqCant').innerText = qq.toFixed(1);
+        document.getElementById('cConcentrado').innerText = cConcentrado.toFixed(2);
+        document.getElementById('cVitaminas').innerText = cVitaminas.toFixed(2);
+        document.getElementById('avesVivas').innerText = vivas;
+        document.getElementById('totalLbs').innerText = lbs;
+    }
+
+    window.onload = calcular;
+</script>
+
+</body>
+</html>
+
